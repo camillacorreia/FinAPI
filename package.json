@@ -1,0 +1,17 @@
+{
+  "name": "FinAPI",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/camillacorreia/FinAPI.git",
+  "author": "Camilla Correia <camillajesuscorreia@hotmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
