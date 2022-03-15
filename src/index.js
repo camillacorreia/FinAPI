@@ -7,6 +7,21 @@ app.use(express.json());
 
 const customers = [];
 
+// Middleware
+function verifyIfExistsAccountCPF(request, response, next) {
+  const { cpf } = request.params;
+
+  const customer = customers.find(customer => customer.cpf === cpf);
+
+  if(!customer) {
+    return response.status(400).json({ error: "Customer not found"})
+  }
+
+  request.customer = customer;
+
+  return next();
+}
+
 app.post("/account", (request, response) => {
   const id = uuidv4();
   const { name, cpf } = request.body;
@@ -31,16 +46,12 @@ app.post("/account", (request, response) => {
   return response.status(201).send(newCustomer);
 })
 
-app.get("/statement/:cpf", (request, response) => {
-  const { cpf } = request.params;
-
-  const customer = customers.find(customer => customer.cpf === cpf);
-
-  if(!customer) {
-    return response.status(400).json({ error: "Customer not found"})
-  }
-
+app.get("/statement/:cpf", verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  
   return response.json(customer.statement);
 });
+
+// Precisa que todas as rotas passem por esse middleware ==> app.use(verifyIfExistsAccountCPF)
 
 app.listen(3333);
