@@ -19,14 +19,24 @@ app.post("/account", (request, response) => {
     return response.status(400).json({ error: "Customer alredy exists!"})
   }
 
-  customers.push({
-    id: uuidv4,
+  const newCustomer = {
+    id,
     name,
     cpf,
     statement: []
-  });
+  }
 
-  return response.status(201).send();
+  customers.push(newCustomer);
+
+  return response.status(201).send(newCustomer);
 })
+
+app.get("/statement/:cpf", (request, response) => {
+  const { cpf } = request.params;
+
+  const customer = customers.find(customer => customer.cpf === cpf);
+
+  return response.json(customer.statement);
+});
 
 app.listen(3333);
