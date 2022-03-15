@@ -48,10 +48,28 @@ app.post("/account", (request, response) => {
 
 app.get("/statement/:cpf", verifyIfExistsAccountCPF, (request, response) => {
   const { customer } = request;
-  
+
   return response.json(customer.statement);
 });
 
 // Precisa que todas as rotas passem por esse middleware ==> app.use(verifyIfExistsAccountCPF)
+
+app.post("/deposit/:cpf", verifyIfExistsAccountCPF, (request, response) => {
+  const { description, amount } = request.body;
+
+  const { customer } = request;
+  
+  const statementOperation = {
+    description,
+    amount,
+    created_at: new Date(),
+    type: "credit"
+  }
+
+  customer.statement.push(statementOperation);
+
+  return response.status(201).send(statementOperation);
+})
+
 
 app.listen(3333);
