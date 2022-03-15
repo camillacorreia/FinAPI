@@ -131,4 +131,12 @@ app.get("/account/:cpf", verifyIfExistsAccountCPF, (request, response) => {
   return response.status(201).send(customer);
 })
 
+app.delete("/account/:cpf", verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  customers.splice(customer, 1);
+
+  return response.status(201).send(customers);
+})
+
 app.listen(3333);
